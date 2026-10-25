@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroShield – Crop Diagnostics</title>
+    <!-- Link to our clean, separate CSS file -->
+    <style>
+        /* Base Resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f4f6;
+    color: #374151;
+    line-height: 1.5;
+}
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.hidden {
+    display: none !important;
+}
+.font-bold {
+    font-weight: 700;
+}
+
+/* Header layout styles */
+.main-header {
+    background-color: #047857;
+    color: #ffffff;
+    padding: 15px 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.badge {
+    background-color: #065f46;
+    color: #a7f3d0;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Main content grid system */
+.main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+@media (max-width: 768px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card UI container properties */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+.card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+    color: #111827;
+}
+.subtitle {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+/* Form structures style layout */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    outline: none;
+    font-size: 0.9rem;
+}
+.form-group input:focus {
+    border-color: #10b981;
+}
+
+/* Drag drop visual box rules */
+.upload-box {
+    border: 2px dashed #a7f3d0;
+    background-color: #f0fdf4;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+.upload-box:hover {
+    background-color: #d1f7e2;
+}
+.box-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #047857;
+}
+.box-sub {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+.feedback-msg {
+    font-size: 0.8rem;
+    color: #047857;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* Action controls styling mechanics */
+.btn {
+    width: 100%;
+    background-color: #059669;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #047857;
+}
+
+/* Diagnostics result values configurations */
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+.conf-badge {
+    background-color: #d1f7e2;
+    color: #065f46;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.results-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: #f9fafb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+.label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #9ca3af;
+    font-weight: 700;
+}
+.value {
+    font-size: 0.95rem;
+    color: #1f2937;
+}
+.danger-text {
+    color: #dc2626;
+}
+.results-body h4, .remedy-box h4 {
+    font-size: 0.85rem;
+    color: #4b5563;
+    margin-bottom: 4px;
+}
+.results-body p {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin-bottom: 15px;
+}
+.remedy-box {
+    background-color: #fffbeb;
+    border-left: 4px solid #d97706;
+    padding: 15px;
+    border-radius: 0 8px 8px 0;
+}
+.remedy-box p {
+    font-size: 0.9rem;
+    color: #b45309;
+}
+
+/* Statistics view components configuration blocks */
+.stat-box {
+    background-color: #f9fafb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+.stat-number {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #1f2937;
+}
+
+/* Spinner element processing keyframe animations */
+.text-center {
+    text-align: center;
+}
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #10b981;
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    animation: spin 0.8s linear infinite;
+}
+
+/* AI Recommendations Card */
+#recommendationCard {
+    margin-top: 20px;
+    padding: 24px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid #dce8df;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+#recommendationCard h2 {
+    color: #216e45;
+    margin-bottom: 8px;
+}
+
+#recommendationCard .subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+#recommendationContent p {
+    background: #f3f8f4;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border-radius: 8px;
+    line-height: 1.6;
+    color: #374151;
+}
+
+#getRecommendationsBtn {
+    background: #25834f;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#getRecommendationsBtn:hover {
+    background: #19683d;
+}
+
+#getRecommendationsBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#recommendationStatus {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container header-flex">
+            <h1>🌱 AgroShield</h1>
+            <span class="badge">AI & Analytics System</span>
+        </div>
+    </header>
+
+    <main class="container main-grid">
+        <!-- Diagnostic Action Column -->
+        <div class="left-column">
+            <div class="card">
+                <h2>Crop Diagnostic Scan</h2>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="username">Farmer / Operator Name</label>
+                        <input type="text" id="username" placeholder="Enter name (or defaults to Guest)">
+                    </div>
+
+                    <div id="dropzone" class="upload-box">
+                        <p class="box-title">Click to select a leaf picture</p>
+                        <p class="box-sub">Supports PNG, JPG, JPEG</p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div id="fileFeedback" class="feedback-msg"></div>
+
+                    <button type="submit" class="btn">Execute Diagnostic Engine</button>
+                </form>
+            </div>
+
+            <!-- Loader Indicator -->
+            <div id="loader" class="card text-center hidden">
+                <div class="spinner"></div>
+                <p>Running Computer Vision Matrix...</p>
+            </div>
+
+            <!-- Output Results -->
+            <div id="resultsCard" class="card hidden">
+                <div class="results-header">
+                    <h3>Diagnosis Output</h3>
+                    <span id="resConfidence" class="conf-badge"></span>
+                </div>
+                <div class="results-meta">
+                    <div>
+                        <span class="label">Target Crop</span>
+                        <p id="resPlant" class="value font-bold"></p>
+                    </div>
+                    <div>
+                        <span class="label">Condition Status</span>
+                        <p id="resDisease" class="value danger-text font-bold"></p>
+                    </div>
+                </div>
+                <div class="results-body">
+                    <h4>Identified Symptoms</h4>
+                    <p id="resSymptoms"></p>
+                </div>
+                <div class="remedy-box">
+                    <h4>Recommended Botanical Remedy</h4>
+                    <p id="resRemedy"></p>
+                </div>
+            </div>
+        </div>
+         <!-- AI Recommendations: Separate from disease prediction -->
+<div id="recommendationCard" class="card shadow-sm hidden">
+    <h2>AI Recommendations</h2>
+    <p class="subtitle">
+        Suggested next steps based on your detected plant disease
+    </p>
+
+    <div id="recommendationContent">
+        <p>Recommendations will appear here.</p>
+    </div>
+
+    <button type="button" id="getRecommendationsBtn">
+        Get Recommendations
+    </button>
+
+    <p id="recommendationStatus" aria-live="polite"></p>
+</div>
+ 
+        <!-- Metrics Column -->
+        <div class="right-column">
+            <div class="card shadow-sm">
+                <h2>Platform Metrics</h2>
+                <p class="subtitle">Compiled via Pandas logs engine</p>
+                
+                <div class="stat-box">
+                    <span class="label">Total Scans</span>
+                    <p id="statTotalScans" class="stat-number">0</p>
+                </div>
+                
+                <div class="stat-box">
+                    <span class="label">System Avg Confidence</span>
+                    <p id="statAvgConf" class="stat-number">0%</p>
+                </div>
+            </div>
+        </div>
+       
+
+    </main>
+
+    <!-- Link to our clean, separate JavaScript file -->
+    <script>
+        // 1. Wait for the HTML elements to fully load in the browser
+document.addEventListener("DOMContentLoaded", () => {
+    
+    // 2. Select the HTML elements we need using their unique IDs
+    const uploadForm = document.getElementById("uploadForm");
+    const usernameInput = document.getElementById("username");
+    const fileInput = document.getElementById("fileInput");
+    const dropzone = document.getElementById("dropzone");
+    const fileFeedback = document.getElementById("fileFeedback");
+    
+const recommendationCard =
+    document.getElementById("recommendationCard");
+
+const recommendationBtn =
+    document.getElementById("getRecommendationsBtn");
+
+const recommendationStatus =
+    document.getElementById("recommendationStatus");
+
+
+recommendationBtn.addEventListener("click", async () => {
+    const plant = document.getElementById("resPlant").textContent.trim();
+    const disease = document.getElementById("resDisease").textContent.trim();
+
+    recommendationStatus.textContent = "Loading recommendations...";
+    recommendationBtn.disabled = true;
+
+    try {
+        const formData = new FormData();
+        formData.append("plant_name", plant);
+        formData.append("disease_name", disease);
+
+        const response = await fetch("/recommendations", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.detail || "Request failed");
+        }
+
+        recommendationContent.replaceChildren();
+
+        data.recommendations.forEach((item) => {
+            const p = document.createElement("p");
+            p.textContent = "• " + item;
+            recommendationContent.appendChild(p);
+        });
+
+        recommendationStatus.textContent = "Recommendations loaded.";
+
+    } catch (error) {
+        recommendationStatus.textContent =
+            "Recommendations unavailable. Disease detection still works.";
+        console.error(error);
+    } finally {
+        recommendationBtn.disabled = false;
+    }
+});
+
+
+
+    // 3. Make the custom dropzone box click the hidden file input
+    dropzone.addEventListener("click", () => {
+        fileInput.click();
+    });
+
+    // 4. Update the text when a file is selected to show the user it worked
+    fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+            fileFeedback.textContent = `Selected file: ${fileInput.files[0].name}`;
+            fileFeedback.style.color = "green";
+        }
+    });
+
+    // 5. Intercept the Form Submission
+    
+uploadForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const username = usernameInput.value.trim() || "Guest";
+    const file = fileInput.files[0];
+
+    if (!file) {
+        fileFeedback.textContent = "Please select a leaf picture first.";
+        fileFeedback.style.color = "red";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("username", username);
+
+    document.getElementById("loader").classList.remove("hidden");
+    document.getElementById("resultsCard").classList.add("hidden");
+
+    try {
+        const response = await fetch("/predict", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.detail || "Prediction failed");
+        }
+
+        const parts = data.predicted_disease.split("___");
+
+        document.getElementById("resPlant").textContent =
+            parts[0].replaceAll("_", " ");
+
+        document.getElementById("resDisease").textContent =
+            (parts[1] || "Unknown").replaceAll("_", " ");
+        
+        document.getElementById("resSymptoms").textContent =
+            data.symptoms || "Symptoms information is not available yet.";
+
+        document.getElementById("resConfidence").textContent =
+            data.confidence + "% confidence";
+
+        document.getElementById("resultsCard").classList.remove("hidden");
+        await loadMetrics();
+        document.getElementById("recommendationCard").classList.remove("hidden");
+
+        fileFeedback.textContent = `Scan completed for ${username}.`;
+        fileFeedback.style.color = "green";
+
+    } catch (error) {
+        fileFeedback.textContent = "Error: " + error.message;
+        fileFeedback.style.color = "red";
+    } finally {
+        document.getElementById("loader").classList.add("hidden");
+    }
+});        
+async function loadMetrics() {
+    try {
+        const response = await fetch("/metrics");
+        const data = await response.json();
+
+        document.getElementById("statTotalScans").textContent =
+            data.total_scans;
+
+        document.getElementById("statAvgConf").textContent =
+            data.avg_confidence + "%";
+
+    } catch (error) {
+        console.error("Failed to load metrics:", error);
+    }
+}
+
+
+
+    });
+    </script>
+
+</body>
+</html>

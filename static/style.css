@@ -1,0 +1,234 @@
+/* Base Resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f4f6;
+    color: #374151;
+    line-height: 1.5;
+}
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.hidden {
+    display: none !important;
+}
+.font-bold {
+    font-weight: 700;
+}
+
+/* Header layout styles */
+.main-header {
+    background-color: #047857;
+    color: #ffffff;
+    padding: 15px 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.badge {
+    background-color: #065f46;
+    color: #a7f3d0;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Main content grid system */
+.main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+@media (max-width: 768px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card UI container properties */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+.card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+    color: #111827;
+}
+.subtitle {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+/* Form structures style layout */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    outline: none;
+    font-size: 0.9rem;
+}
+.form-group input:focus {
+    border-color: #10b981;
+}
+
+/* Drag drop visual box rules */
+.upload-box {
+    border: 2px dashed #a7f3d0;
+    background-color: #f0fdf4;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+.upload-box:hover {
+    background-color: #d1f7e2;
+}
+.box-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #047857;
+}
+.box-sub {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+.feedback-msg {
+    font-size: 0.8rem;
+    color: #047857;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* Action controls styling mechanics */
+.btn {
+    width: 100%;
+    background-color: #059669;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #047857;
+}
+
+/* Diagnostics result values configurations */
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+.conf-badge {
+    background-color: #d1f7e2;
+    color: #065f46;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.results-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: #f9fafb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+.label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #9ca3af;
+    font-weight: 700;
+}
+.value {
+    font-size: 0.95rem;
+    color: #1f2937;
+}
+.danger-text {
+    color: #dc2626;
+}
+.results-body h4, .remedy-box h4 {
+    font-size: 0.85rem;
+    color: #4b5563;
+    margin-bottom: 4px;
+}
+.results-body p {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin-bottom: 15px;
+}
+.remedy-box {
+    background-color: #fffbeb;
+    border-left: 4px solid #d97706;
+    padding: 15px;
+    border-radius: 0 8px 8px 0;
+}
+.remedy-box p {
+    font-size: 0.9rem;
+    color: #b45309;
+}
+
+/* Statistics view components configuration blocks */
+.stat-box {
+    background-color: #f9fafb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+.stat-number {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #1f2937;
+}
+
+/* Spinner element processing keyframe animations */
+.text-center {
+    text-align: center;
+}
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #10b981;
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
